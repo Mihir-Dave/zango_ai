@@ -2,83 +2,137 @@ import Link from "next/link";
 import { Button } from "../../components/Button";
 import { Header } from "../../components/Header";
 
-const options = [
-  "Keep focus outside the modal to reduce trapping.",
-  "Disable keyboard controls.",
-  "Use color alone for every state.",
-  "Hide labels until hover.",
+const accessibilityOptions = [
+  "Trap focus inside the modal while it is open.",
+  "Allow focus to move freely to the page behind the modal.",
+  "Require candidates to use a mouse to close the modal.",
+  "Hide the focus indicator so the interface looks cleaner.",
+];
+
+const designOptions = [
+  "Design for the average user.",
+  "Create products that can be used by everyone, regardless of ability.",
+  "Focus primarily on aesthetic appeal.",
 ];
 
 export default function QuestionsPage() {
   return (
-    <main className="screen questions-screen">
+    <main className="screen figma-page questions-screen">
       <Header />
-      <section className="questions-layout">
-        <article className="question-stack">
-          <section className="question-card coding-task">
-            <p className="eyebrow">CODING TASK</p>
+
+      <div className="figma-question-layout">
+        <section className="figma-question-list">
+          <p className="figma-eyebrow">CODING CHALLENGE</p>
+
+          <article className="figma-challenge-row">
             <div>
               <h2>Bracket combinations</h2>
-              <p>45 min · Python</p>
+              <p>30 min · JavaScript</p>
             </div>
+
             <Link href="/challenge">
-              <Button>Start now</Button>
+              <Button>Open challenge</Button>
             </Link>
-          </section>
+          </article>
 
-          <section className="response-card">
-            <div className="question-title">
-              <span className="tag">A</span>
-              <h2>Tell us about your design background.</h2>
-            </div>
-            <textarea defaultValue="I have 10+ years of backend experience." />
-          </section>
+          <p className="figma-eyebrow">OPEN-ENDED QUESTIONS</p>
 
-          <section className="mcq-card">
-            <div className="question-title">
-              <span className="tag">B</span>
-              <h2>Which behavior is essential for an accessible modal?</h2>
+          <article className="figma-question-card">
+            <div className="figma-question-heading">
+              <span className="figma-number">01</span>
+              <h2>How many years of experience do you have as a developer?</h2>
             </div>
-            {options.map((option, index) => (
-              <label key={option} className={index === 1 ? "selected-option" : ""}>
-                <input type="radio" name="modal" defaultChecked={index === 1} />
-                {option}
-              </label>
-            ))}
-          </section>
 
-          <section className="mcq-card short-card">
-            <div className="question-title">
-              <span className="tag">C</span>
-              <h2>Universal design means designing for one average user.</h2>
+            <div className="figma-editor-toolbar" aria-label="Formatting options">
+              <span>Aa</span>
+              <span>B</span>
+              <span>I</span>
+              <span>• List</span>
+              <span>↗</span>
             </div>
-            <label>
-              <input type="checkbox" defaultChecked /> True
-            </label>
-          </section>
-        </article>
 
-        <aside className="progress-rail">
-          <p className="eyebrow">TIME LEFT</p>
-          <strong>4:12:00</strong>
-          <h2>Progress</h2>
-          <dl>
-            <div>
-              <dt>Coding challenge</dt>
-              <dd>Done</dd>
+            <textarea
+              aria-label="Written response to question 1"
+              maxLength={500}
+              placeholder="Write your response here..."
+              className="figma-response-input"
+            />
+            <p className="figma-response-count">0 / 500</p>
+          </article>
+
+          <article className="figma-question-card">
+            <div className="figma-question-heading">
+              <span className="figma-number">02</span>
+              <h2>
+                Which behavior is essential for an accessible modal dialog?
+              </h2>
             </div>
-            <div>
-              <dt>Open-ended</dt>
-              <dd>4 questions</dd>
+
+            <p className="figma-helper">Select one answer</p>
+
+            <div className="figma-options">
+              {accessibilityOptions.map((option, index) => (
+                <label key={option}>
+                  <input
+                    type="radio"
+                    name="accessibility"
+                    value={option}
+                  />
+                  <span>{option}</span>
+                </label>
+              ))}
             </div>
-            <div>
-              <dt>Review</dt>
-              <dd>Available</dd>
+          </article>
+
+          <article className="figma-question-card">
+            <div className="figma-question-heading">
+              <span className="figma-number">03</span>
+              <h2>What is a key principle of universal design?</h2>
             </div>
-          </dl>
-          <Button>Submit early</Button>
+
+            <p className="figma-helper">Select one answer</p>
+
+            <div className="figma-options">
+              {designOptions.map((option) => (
+                <label key={option}>
+                  <input
+                    type="radio"
+                    name="universal-design"
+                    value={option}
+                  />
+                  <span>{option}</span>
+                </label>
+              ))}
+            </div>
+          </article>
+        </section>
+
+        <aside className="figma-progress">
+          <span className="figma-eyebrow">TIME LEFT</span>
+          <strong className="figma-timer">2:47:12</strong>
+
+          <div className="figma-progress-bottom">
+            <h2>Your progress</h2>
+
+            <div className="figma-progress-item">
+              <span>Coding challenge</span>
+              <span>Not started</span>
+            </div>
+
+            <div className="figma-progress-item">
+              <span>Open-ended</span>
+              <span>2 questions</span>
+            </div>
+
+            <div className="figma-progress-item">
+              <span>Review &amp; submit</span>
+              <span>Locked</span>
+            </div>
+
+            <Button>Submit assessment</Button>
+          </div>
         </aside>
-      </section>
+      </div>
     </main>
   );
 }

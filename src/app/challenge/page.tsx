@@ -4,54 +4,72 @@ import { Header } from "../../components/Header";
 
 export default function ChallengePage() {
   return (
-    <main className="screen challenge-screen">
+    <main className="screen figma-page challenge-screen">
       <Header showNav />
 
-      <section className="challenge-main">
-        <p className="eyebrow">PRACTICE</p>
-        <h1>Parentheses generator</h1>
-        <p>Find valid arrangements of every bracket type with the smallest possible solution.</p>
+      <section className="figma-challenge-main">
+        <p className="figma-eyebrow">CHALLENGES</p>
 
-        <div className="challenge-layout">
-          <article className="brief-card">
-            <div className="brief-top">
-              <span className="tag tag-warning">Medium</span>
-              <strong>20 pts</strong>
+        <h1>Bracket combinations</h1>
+
+        <p className="figma-muted">
+          Find every valid arrangement of parentheses with a clean, efficient
+          solution.
+        </p>
+
+        <div className="figma-challenge-grid">
+          <article className="figma-info-card">
+            <div className="figma-card-top">
+              <span className="figma-tag">Hard</span>
+              <span>12 points</span>
             </div>
-            <h2>Assignment</h2>
+
+            <h2>Your brief</h2>
+
             <p>
-              Given a number of bracket pairs, print examples until the time runs out. Focus on
-              matching only the sample cases.
+              Given n pairs of brackets, return all valid combinations. Aim for
+              clarity first, then use pruning to keep the recursion efficient.
             </p>
-            <dl className="facts">
+
+            <div className="figma-facts">
               <div>
-                <dt>DURATION</dt>
-                <dd>25 mins</dd>
+                <span>TIME</span>
+                <strong>40 min</strong>
               </div>
               <div>
-                <dt>LEVEL</dt>
-                <dd>Easy</dd>
+                <span>DIFFICULTY</span>
+                <strong>Hard</strong>
               </div>
-            </dl>
+            </div>
           </article>
 
-          <aside className="practice-card">
-            <h2>Topics</h2>
-            <p>This challenge is mostly about syntax and array formatting.</p>
-            <ul>
-              <li>Breadth-first search</li>
-              <li>Sorting</li>
-              <li>Regex cleanup</li>
+          <aside className="figma-info-card">
+            <h2>What is this challenge about?</h2>
+
+            <p>
+              Explore a problem built to test fundamentals under real-world
+              time constraints.
+            </p>
+
+            <ul className="figma-bullets">
+              <li>Depth-first search</li>
+              <li>Stack patterns</li>
+              <li>Input validation</li>
             </ul>
           </aside>
         </div>
       </section>
 
-      <footer className="workspace-footer">
-        <p>Autosave is disabled.</p>
-        <span>25 minutes</span>
+      <footer className="figma-challenge-footer">
+        <div>
+          <strong>Ready when you are</strong>
+          <span>Your progress is saved automatically.</span>
+        </div>
+
+        <span>40 minutes</span>
+
         <Link href="/workspace">
-          <Button>Begin coding</Button>
+          <Button>Begin challenge →</Button>
         </Link>
       </footer>
     </main>
