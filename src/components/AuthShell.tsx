@@ -1,88 +1,183 @@
+
+"use client";
+
+
 import Link from "next/link";
 import { Button } from "./Button";
 
+type AuthMode =
+  | "sign-in"
+  | "create-account"
+  | "forgot-password"
+  | "reset-password"
+  | "check-email";
+
 type AuthShellProps = {
-  mode: "sign-in" | "create-account" | "forgot-password" | "reset-password" | "check-email";
+  mode: AuthMode;
 };
 
-const copy = {
+const pageContent = {
   "sign-in": {
-    title: "Sign back in",
-    subtitle: "Use your personal email to return to the interview workspace.",
-    fields: ["EMAIL", "SECRET CODE"],
-    button: "Continue",
-    helper: "Forgot access code?",
-    footer: "No account? Join now",
+    title: "Welcome back",
+    subtitle: "Sign in to continue to your hiring workspace.",
+    fields: [
+      { label: "WORK EMAIL", placeholder: "name@company.com", type: "email" },
+      { label: "PASSWORD", placeholder: "Enter your password", type: "password" },
+    ],
+    button: "Sign in",
+    footer: "New to ABC Company? Create your account",
+    footerHref: "/auth/create-account",
   },
   "create-account": {
-    title: "Create your profile",
-    subtitle: "Start a new candidate account for every assessment.",
-    fields: ["DISPLAY NAME", "PERSONAL EMAIL", "PIN"],
-    button: "Register profile",
-    helper: "Password can be any length",
-    footer: "Already registered? Create another",
+    title: "Create your account",
+    subtitle: "Set up your profile to join the hiring workspace.",
+    fields: [
+      { label: "FULL NAME", placeholder: "Your name", type: "text" },
+      { label: "WORK EMAIL", placeholder: "name@company.com", type: "email" },
+      { label: "PASSWORD", placeholder: "Create a password", type: "password" },
+    ],
+    button: "Create account",
+    footer: "Already have an account? Sign in",
+    footerHref: "/auth/sign-in",
   },
   "forgot-password": {
-    title: "Recover account",
-    subtitle: "We will send a magic link if your email is recognized.",
-    fields: ["USERNAME"],
-    button: "Send reset password",
-    helper: "",
-    footer: "Return to login",
+    title: "Forgot your password?",
+    subtitle: "Enter your work email and we'll send you a secure reset link.",
+    fields: [
+      { label: "WORK EMAIL", placeholder: "name@company.com", type: "email" },
+    ],
+    button: "Send reset link",
+    footer: "Back to sign in",
+    footerHref: "/auth/sign-in",
   },
   "reset-password": {
-    title: "Choose new password",
-    subtitle: "Set a temporary password that can be changed later.",
-    fields: ["PASSWORD", "REPEAT PASSWORD"],
-    button: "Save password",
-    helper: "Must include a symbol and 18 characters",
-    footer: "Back to login",
+    title: "Set a new password",
+    subtitle: "Create a password you haven't used for this workspace before.",
+    fields: [
+      { label: "NEW PASSWORD", placeholder: "Enter a new password", type: "password" },
+      {
+        label: "CONFIRM PASSWORD",
+        placeholder: "Re-enter your new password",
+        type: "password",
+      },
+    ],
+    button: "Update password",
+    footer: "Back to sign in",
+    footerHref: "/auth/sign-in",
   },
   "check-email": {
-    title: "Inbox requested",
-    subtitle: "Check your SMS messages for a reset code.",
+    title: "Check your email",
+    subtitle:
+      "We sent a password reset link to name@company.com. The link expires in 30 minutes.",
     fields: [],
-    button: "Open inbox",
-    helper: "",
-    footer: "Resend after 2 minutes",
+    button: "Return to sign in",
+    footer: "Didn't receive it? Resend email",
+    footerHref: "/auth/forgot-password",
   },
-};
+} satisfies Record<
+  AuthMode,
+  {
+    title: string;
+    subtitle: string;
+    fields: { label: string; placeholder: string; type: string }[];
+    button: string;
+    footer: string;
+    footerHref: string;
+  }
+>;
 
 export function AuthShell({ mode }: AuthShellProps) {
-  const data = copy[mode];
+  const data = pageContent[mode];
+  const isSignIn = mode === "sign-in";
+  const isCreateAccount = mode === "create-account";
+  const isResetPassword = mode === "reset-password";
+  const isCheckEmail = mode === "check-email";
 
   return (
-    <main className="auth-screen">
+    <main className={`auth-screen auth-screen--${mode}`}>
       <aside className="auth-visual">
         <div className="auth-brand">
-          <span className="brand-icon">A</span>
-          <span>ABC Company</span>
-          <small>DUMMY BRANDING</small>
+          <span className="auth-brand-name">ABC Company</span>
+          <span className="auth-brand-tagline">
+            HIRING, WITHOUT THE BUSYWORK
+          </span>
         </div>
-        <p>
-          Build interviews, rate candidates, and send offers from a single dashboard with manual
-          verification.
-        </p>
+
+        <div className="auth-visual-bottom">
+          <p>
+            Design assessments, review candidates, and move confidently from
+            screening to hire.
+          </p>
+          <div className="auth-benefits">
+            <span>Structured assessments</span>
+            <span>Fair evaluation</span>
+            <span>Faster decisions</span>
+          </div>
+        </div>
       </aside>
 
-      <section className={`auth-panel auth-${mode}`}>
-        <form className="auth-form">
-          {mode === "check-email" ? <div className="email-icon">✉</div> : null}
+      <section className="auth-panel">
+        <div className="auth-form-wrap">
+          {isCheckEmail && (
+            <div className="auth-email-icon" aria-hidden="true">
+              ✉
+            </div>
+          )}
+
           <h1>{data.title}</h1>
-          <p>{data.subtitle}</p>
+          <p className="auth-subtitle">{data.subtitle}</p>
 
-          {data.fields.map((field) => (
-            <label key={field}>
-              {field}
-              <input placeholder={field === "PIN" ? "0000" : "name@example.org"} />
-            </label>
-          ))}
+          <form
+            className="auth-form"
+            onSubmit={(event) => event.preventDefault()}
+          >
+            {data.fields.map((field, index) => (
+              <label className="auth-field" key={field.label}>
+                <span>{field.label}</span>
+                <input
+                  type={field.type}
+                  name={field.label.toLowerCase().replaceAll(" ", "-")}
+                  placeholder={field.placeholder}
+                  autoComplete={
+                    field.type === "email"
+                      ? "email"
+                      : isCreateAccount && index === 0
+                        ? "name"
+                        : isResetPassword
+                          ? "new-password"
+                          : isSignIn
+                            ? "current-password"
+                            : "new-password"
+                  }
+                  required
+                  minLength={field.type === "password" ? 8 : undefined}
+                />
+              </label>
+            ))}
 
-          {data.helper ? <Link href="/auth/forgot-password">{data.helper}</Link> : null}
-          <Button>{data.button}</Button>
-          <Link href="/auth/sign-in">{data.footer}</Link>
-        </form>
+            {(isCreateAccount || isResetPassword) && (
+              <p className="auth-password-hint">
+                Use 8+ characters with a number or symbol
+              </p>
+            )}
+
+            {isSignIn && (
+              <div className="auth-forgot-link">
+                <Link href="/auth/forgot-password">
+                  Forgot password?
+                </Link>
+              </div>
+            )}
+
+            <Button>{data.button}</Button>
+
+            <Link className="auth-footer-link" href={data.footerHref}>
+              {data.footer}
+            </Link>
+          </form>
+        </div>
       </section>
     </main>
   );
 }
+
